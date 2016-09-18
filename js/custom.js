@@ -13,11 +13,11 @@ $(function() {
         var params = [];
 
         $.each( $(":checkbox:checked"), function( key , value){
-            // accessible course
             params.push($(this).val());
-            CreateTimeTable(params,timetable);
         });
-
+        
+        // do your job :)
+        CreateTimeTable(params,timetable);
 
     });
 
