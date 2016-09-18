@@ -8,16 +8,28 @@ const SERIE2 = "I2";
 
 $(function() {
     var timetable = populateData();
+    var week = 1;
+    var params = [];
 
     $(':checkbox').on("change",function() {
-        var params = [];
+
+        // clear the previous params
+        params = [];
 
         $.each( $(":checkbox:checked"), function( key , value){
             params.push($(this).val());
         });
-        
+
         // do your job :)
-        CreateTimeTable(params,timetable);
+        CreateTimeTable(params,timetable,week);
+
+    });
+
+    $(':radio[name="semaine"]').on("click",function(){
+
+        week = parseInt($(':radio[name="semaine"]:checked').val());
+        // do your job :)
+        CreateTimeTable(params,timetable,week);
 
     });
 
@@ -30,29 +42,31 @@ function populateData() {
 
     // list of courses (possibly to be modified for some reasons (ie : serie schedule)
 
-    var IA = new Course("I310B IA",2,"A017",IA_RESTRICTION);
-    var InterIntranet = new Course("I303A Inter-Intranet",2,"B11");
-    var LaboReseau = new Course("I303B Labo réseaux",2,"A017");
-    var AdmUnixEx = new Course("I302B Adm Unix (ex)",2,"A019");
-    var SAP1 = new Course("I312A SAP",2,"A017",SAP_RESTRICTION);
+    var IA = new Course("I310B IA",2,"A017",[],IA_RESTRICTION);
+    var InterIntranet = new Course("I303A Inter-Intranet",2,"B11",[]);
+    var LaboReseau = new Course("I303B Labo réseaux",2,"A017",[13],SERIE1);
+    var AdmUnixEx = new Course("I302B Adm Unix (ex)",2,"A019",[13],SERIE2);
+    var SAP1 = new Course("I312A SAP",2,"A017",[],SAP_RESTRICTION);
 
-    var DEATh = new Course("I301B DAE (th)",1,"B23");
-    var Partern = new Course("I301A Pattern",2,"A017",SERIE1);
-    var DEAEx = new Course("I301B DAE (ex)",2,"A019",SERIE2);
-    var Anglais = new Course("I305A Anglais 3",2,"B23",SERIE2);
-    var AdminUnixTh = new Course("I302A Adm Unix (th)",2,"AudB");
+    var DEATh = new Course("I301B DAE (th)",1,"B23",[]);
+    var Partern = new Course("I301A Pattern",2,"A017",[],SERIE1);
+    var DEAEx = new Course("I301B DAE (ex)",2,"A019",[],SERIE2);
+    var Anglais = new Course("I305A Anglais 3",2,"B23",[],SERIE2);
+    var AdminUnixTh = new Course("I302A Adm Unix (th)",2,"AudB",[]);
 
-    var BigData = new Course("I304A Big Data",2,"B11");
-    var Windows = new Course("I302C Windows",2,"A019" , SERIE2);
-    var SAP2 = new Course("I312B SAP",2,"A017",SAP_RESTRICTION);
+    var BigData = new Course("I304A Big Data",2,"B11",[]);
+    var Windows = new Course("I302C Windows",2,"A019" ,[] , SERIE2);
+    var SAP2 = new Course("I312B SAP",2,"A017",[],SAP_RESTRICTION);
 
-    var RestServices = new Course("I313A REST services",2,"A017",WEB_RESTRICTION);
-    var WebCloud = new Course("I313B Web Cloud",2,"A017",WEB_RESTRICTION);
-    var Droit = new Course("I304C Droit déonto",2,"B11");
+    var RestServices = new Course("I313A REST services",2,"A017",[],WEB_RESTRICTION);
+    var WebCloud = new Course("I313B Web Cloud",2,"A017",[],WEB_RESTRICTION);
+    var Droit = new Course("I304C Droit déonto",2,"B11",[6]);
 
-    var MIC1 = new Course("I311A Outils MIC",2,"A017",MICROSOFT_RESTRICTION);
-    var MIC2 = new Course("I311B Outils MIC",2,"A017",MICROSOFT_RESTRICTION);
-    var Unity = new Course("I314A Unity",4,"A017",UNITY_RESTRICTION);
+    var MIC1 = new Course("I311A Outils MIC",2,"A017",[],MICROSOFT_RESTRICTION);
+    var MIC2 = new Course("I311B Outils MIC",2,"A017",[],MICROSOFT_RESTRICTION);
+    var Unity = new Course("I314A Unity",4,"A017",[],UNITY_RESTRICTION);
+
+    var Agile = new Course("I304B Projets Agile",2,"B12",[1,2,7,8,9,10,11,12,13]);
 
     // Modified courses object;
 
@@ -74,6 +88,9 @@ function populateData() {
     DEAEx2.restriction = SERIE1;
     DEAEx2.physicLocation = "A019";
 
+    var DEATh2 = cloneObject(DEATh);
+    DEAEx2.weeksExceptions =  [1,2,7,8,9,10,11,12,13];
+
     // populate each Day
 
     var Monday = {
@@ -83,7 +100,9 @@ function populateData() {
         hour_17_00 : [ SAP1 ]
     };
     var Tuesday = {
+        hour_08_00 : [ Agile ],
         hour_09_30 : [ DEATh ],
+        hour_10_00 : [ DEATh2 ],
         hour_10_45 : [ Partern , DEAEx ],
         hour_13_45 : [ DEAEx2 , Anglais ],
         hour_17_00 : [ AdminUnixTh ]
@@ -121,11 +140,12 @@ function populateData() {
 };
 
 
-function Course(name, duration, physicLocation, restriction) {
+function Course(name, duration, physicLocation, weeksExceptions, restriction) {
     this.name = name;
     this.duration = duration;
     this.physicLocation = physicLocation;
-    if ( restriction == undefined ) {
+    this.weeksExceptions = weeksExceptions;
+    if ( restriction === undefined ) {
         this.restriction = "";
     } else {
         this.restriction = restriction;
@@ -137,13 +157,14 @@ function cloneObject(obj) {
     return  jQuery.extend(true, {}, obj);
 };
 
-function findAccessibleCourse(obj,params) {
+function findAccessibleCourse(obj,params,week) {
     var toReturn;
 
     // Iteration
     $.each(obj, function( key , value){
-        // accessible course
-        if ( value.restriction == "" || jQuery.inArray(value.restriction, params) != -1 ) {
+        // find the accessible course
+
+        if ( (value.restriction === "" || jQuery.inArray(value.restriction, params) !== -1 ) && ( ( jQuery.inArray(week, value.weeksExceptions) ) === -1) ) {
             toReturn = value;
             return false;
         }
@@ -152,23 +173,20 @@ function findAccessibleCourse(obj,params) {
 };
 
 function graphicalTimeFix(course, hour){
-    //debugger;
-    if (jQuery.inArray(hour, ["08_30", "09_30"] ) != -1 ) {
-        return course.duration + 1;
-    }
 
-    if (jQuery.inArray(hour, ["13_15", "17_00" , "16_00"] ) != -1 ) {
+
+    if (jQuery.inArray(hour, ["08_00", "08_30", "09_30", "13_15", "17_00" , "16_00"] ) != -1 ) {
         return course.duration + 2;
     }
 
     return course.duration;
 }
 
-function CreateTimeTable(params, courses) {
+function CreateTimeTable(params, courses, week) {
 
     $(".Timetable__room").parent("tr:not(.Timetable__time)").find("td").remove();
 
-    var departureHours = [ "08_30", "09_30","10_30","10_45","12_45","13_15","13_45","15_45","16_00", "17_00","17_15","18_00","19_00"];
+    var departureHours = ["08_00", "08_30", "09_30","10_00","10_30","10_45","12_45","13_15","13_45","15_45","16_00", "17_00","17_15","18_00","19_00"];
     var propertyName = "hour_";
 
     $.each( courses, function( key, value ) {
@@ -184,7 +202,7 @@ function CreateTimeTable(params, courses) {
 
                 // Found a possible course for this hour
             if (value.hasOwnProperty(testName)) {
-                var chosenCourse = findAccessibleCourse(value[testName],params);
+                var chosenCourse = findAccessibleCourse(value[testName],params,week);
 
                 if (chosenCourse != undefined) {
 
