@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TimeTableIPL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="design.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h2>Horaire IPL 3e</h2>
+        <p>Sélectionnez les paramètres qui correspondent à votre situation</p>
+    </div>
+</div>
+
+<div class="container">
+    <form>
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>Série</th>
+            <th>Options :</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <div class="checkbox">
+                    <label><input type="checkbox" class="options" value="I1">Série 1</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" class="options" value="I2">Série 2</label>
+                </div>
+            </td>
+            <td>
+                <div class="checkbox">
+                    <label><input type="checkbox" class="options" value="IA">Intelligence Artificielle</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" class="options" value="MIC">Outils Microsoft</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" class="options" value="UN">Unity</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" class="options" value="SAP">Progiciel de gestion (SAP)</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" class="options" value="WEB">Compléments WEB</label>
+                </div>
+            </td>
+            </tr>
+        </tbody>
+        </table>
+        </form>
+
+
+<div class="Timetable table-responsive">
+    <table class="Timetable__table table table-bordered">
+
+        <thead>
+        <tr>
+            <th colspan="14">Horaire IPL 3e</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr class="Timetable__time">
+            <th class="Timetable__room"></th>
+            <th>08:30</th>
+            <th>09:30</th>
+            <th>10:30</th>
+            <th>10:45</th>
+            <th>12:45</th>
+            <th>13:15</th>
+            <th>13:45</th>
+            <th>15:45</th>
+            <th>16:00</th>
+            <th>17:00</th>
+            <th>17:15</th>
+            <th>18:00</th>
+            <th>19:00</th>
+        </tr>
+
+        <tr>
+            <th class="Timetable__room">LUNDI</th>
+        </tr>
+
+        <tr>
+        <th class="Timetable__room">MARDI</th>
+        </tr>
+
+        <tr>
+            <th class="Timetable__room">MERCREDI</th>
+        </tr>
+
+        <tr>
+            <th class="Timetable__room">JEUDI</th>
+        </tr>
+
+        <tr>
+            <th class="Timetable__room">VENDREDI</th>
+        </tr>
+
+        </tbody>
+        </table>
+    </div>
+    </div>
+
+
+</body>
+<script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="js/custom.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</html>
