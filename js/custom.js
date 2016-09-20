@@ -89,7 +89,7 @@ function populateData() {
     DEAEx2.physicLocation = "A019";
 
     var DEATh2 = cloneObject(DEATh);
-    DEAEx2.weeksExceptions =  [1,2,7,8,9,10,11,12,13];
+    DEATh2.weeksExceptions =  [1,2,7,8,9,10,11,12,13];
 
     // populate each Day
 
@@ -163,7 +163,7 @@ function findAccessibleCourse(obj,params,week) {
     // Iteration
     $.each(obj, function( key , value){
         // find the accessible course
-
+		
         if ( (value.restriction === "" || jQuery.inArray(value.restriction, params) !== -1 ) && ( ( jQuery.inArray(week, value.weeksExceptions) ) === -1) ) {
             toReturn = value;
             return false;
@@ -191,7 +191,7 @@ function CreateTimeTable(params, courses, week) {
 
     $.each( courses, function( key, value ) {
         for ( var index = 0 ; index < departureHours.length ; index++) {
-
+	
             if (index > departureHours.length ) {
                 return false;
             }
