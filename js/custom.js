@@ -3,6 +3,7 @@ const MICROSOFT_RESTRICTION = "MIC";
 const UNITY_RESTRICTION = "UN";
 const SAP_RESTRICTION = "SAP";
 const WEB_RESTRICTION = "WEB";
+const GESTION_ENT_RESTRICTION = "GESTION_ENT";
 const SERIE1 = "I1";
 const SERIE2 = "I2";
 
@@ -44,7 +45,7 @@ function populateData() {
 
     var IA = new Course("I310B IA",2,"A017",[],IA_RESTRICTION);
     var InterIntranet = new Course("I303A Inter-Intranet",2,"B11",[]);
-    var LaboReseau = new Course("I303B Labo réseaux",2,"A017",[13],SERIE1);
+    var LaboReseau = new Course("I303B Labo r&eacute;seaux",2,"A017",[13],SERIE1);
     var AdmUnixEx = new Course("I302B Adm Unix (ex)",2,"A019",[13],SERIE2);
     var SAP1 = new Course("I312A SAP",2,"A017",[],SAP_RESTRICTION);
 
@@ -60,14 +61,16 @@ function populateData() {
 
     var RestServices = new Course("I313A REST services",2,"A017",[],WEB_RESTRICTION);
     var WebCloud = new Course("I313B Web Cloud",2,"A017",[],WEB_RESTRICTION);
-    var Droit = new Course("I304C Droit déonto",2,"B11",[6]);
+    var Droit = new Course("I304C Droit d&eacute;onto",2,"B11",[6]);
 
     var MIC1 = new Course("I311A Outils MIC",2,"A017",[],MICROSOFT_RESTRICTION);
     var MIC2 = new Course("I311B Outils MIC",2,"A017",[],MICROSOFT_RESTRICTION);
     var Unity = new Course("I314A Unity",4,"A017",[],UNITY_RESTRICTION);
 
     var Agile = new Course("I304B Projets Agile",2,"B12",[1,2,7,8,9,10,11,12,13]);
-
+	
+	var GestionEnt = new Course("IXYZ Gestion (cr&eacute;ation entreprise)",2,"D2",[8,9,10,11,12,13],GESTION_ENT_RESTRICTION);
+	
     // Modified courses object;
 
     var Windows2 = cloneObject(Windows);
@@ -125,7 +128,8 @@ function populateData() {
     var Friday = {
         hour_08_30 : [ MIC1 ],
         hour_10_45 : [ MIC2 ],
-        hour_13_15 : [ Unity ]
+        hour_13_15 : [ Unity ],
+		hour_16_00 : [ GestionEnt ]
     };
 
     item.push(Monday);
@@ -175,8 +179,12 @@ function findAccessibleCourse(obj,params,week) {
 function graphicalTimeFix(course, hour){
 
 
-    if (jQuery.inArray(hour, ["08_00", "08_30", "09_30", "13_15", "17_00" , "16_00"] ) != -1 ) {
+    if (jQuery.inArray(hour, ["08_00", "08_30", "09_30", "13_15"] ) != -1 ) {
         return course.duration + 2;
+    }
+	
+	if (jQuery.inArray(hour, ["17_00" , "16_00"] ) != -1 ) {
+        return course.duration + 3;
     }
 
     return course.duration;
@@ -186,7 +194,7 @@ function CreateTimeTable(params, courses, week) {
 
     $(".Timetable__room").parent("tr:not(.Timetable__time)").find("td").remove();
 
-    var departureHours = ["08_00", "08_30", "09_30","10_00","10_30","10_45","12_45","13_15","13_45","15_45","16_00", "17_00","17_15","18_00","19_00"];
+    var departureHours = ["08_00", "08_30", "09_30","10_00","10_30","10_45","12_45","13_15","13_45","15_45","16_00", "17_00","17_15","18_00","18_30","19_00"];
     var propertyName = "hour_";
 
     $.each( courses, function( key, value ) {
