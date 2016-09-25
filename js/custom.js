@@ -45,11 +45,11 @@ function populateData() {
 
     var IA = new Course("I310B IA",2,"A017",[],IA_RESTRICTION);
     var InterIntranet = new Course("I303A Inter-Intranet",2,"B11",[]);
-    var LaboReseau = new Course("I303B Labo r&eacute;seaux",2,"A017",[13],SERIE1);
-    var AdmUnixEx = new Course("I302B Adm Unix (ex)",2,"A019",[13],SERIE2);
+    var LaboReseau = new Course("I303B Labo r&eacute;seaux",2,"A017",[2,3,6,7,10,11,13],SERIE1);
+    var AdmUnixEx = new Course("I302B Adm Unix (ex)",2,"A019",[2,3,6,7,10,11,13],SERIE2);
     var SAP1 = new Course("I312A SAP",2,"A017",[],SAP_RESTRICTION);
 
-    var DEATh = new Course("I301B DAE (th)",1,"B23",[]);
+    var DEATh = new Course("I301B DAE (th)",1,"B23",[3,4,5,6]);
     var Partern = new Course("I301A Pattern",2,"A017",[],SERIE1);
     var DEAEx = new Course("I301B DAE (ex)",2,"A019",[],SERIE2);
     var Anglais = new Course("I305A Anglais 3",2,"B23",[],SERIE2);
@@ -93,13 +93,21 @@ function populateData() {
 
     var DEATh2 = cloneObject(DEATh);
     DEATh2.weeksExceptions =  [1,2,7,8,9,10,11,12,13];
+	
+	var AdmUnixEx2 = cloneObject(AdmUnixEx);
+	AdmUnixEx2.restriction = SERIE1;
+	AdmUnixEx2.weeksExceptions =  [1,4,5,8,9,12,13];
+	
+	var LaboReseau2 = cloneObject(LaboReseau);
+	LaboReseau2.restriction = SERIE2; 
+	LaboReseau2.weeksExceptions =  [1,4,5,8,9,12,13];
 
     // populate each Day
 
     var Monday = {
         hour_08_30 : [ IA ],
         hour_10_45 : [ InterIntranet ],
-        hour_13_45 : [ LaboReseau , AdmUnixEx ],
+        hour_13_45 : [ LaboReseau , LaboReseau2, AdmUnixEx , AdmUnixEx2 ],
         hour_17_00 : [ SAP1 ]
     };
     var Tuesday = {
